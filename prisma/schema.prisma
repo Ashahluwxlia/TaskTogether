@@ -1,0 +1,732 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email               String              @unique @db.VarChar(255)
+  name                String              @db.VarChar(255)
+  password            String              @db.VarChar(255)
+  image               String?             @db.VarChar(255)
+  emailVerified       DateTime?           @map("email_verified") @db.Timestamptz
+  createdAt           DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime            @default(now()) @map("updated_at") @db.Timestamptz
+  emailNotifications  Boolean             @default(true) @map("email_notifications")
+  theme               String              @default("light") @db.VarChar(20)
+  language            String              @default("en") @db.VarChar(10)
+  status              String              @default("active") @db.VarChar(20)
+  
+  // Relations
+  sessions            Session[]
+  userSettings        UserSettings?
+  userPreferences     UserPreferences?
+  passwordResetTokens PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  createdWorkspaces   Workspace[]         @relation("WorkspaceCreator")
+  workspaceMemberships WorkspaceMember[]
+  createdTeams        Team[]              @relation("TeamCreator")
+  teamMemberships     TeamMember[]
+  createdCategories   Category[]          @relation("CategoryCreator")
+  createdBoards       Board[]             @relation("BoardCreator")
+  boardMemberships    BoardMember[]
+  createdTasks        Task[]              @relation("TaskCreator")
+  assignedTasks       Task[]              @relation("TaskAssignee")
+  taskMemberships     TaskMember[]
+  createdAttachments  TaskAttachment[]    @relation("AttachmentCreator")
+  completedItems      ChecklistItem[]     @relation("ItemCompleter")
+  createdCustomFields CustomField[]       @relation("CustomFieldCreator")
+  authoredComments    Comment[]           @relation("CommentAuthor")
+  notifications       Notification[]
+  activities          Activity[]
+  sentInvitations     Invitation[]        @relation("InvitationCreator")
+  integrations        Integration[]
+  auditLogs           AuditLog[]
+  ownedTeams         Team[]             @relation("TeamOwner")
+  categoryMemberships CategoryMember[]
+  createdLabels      Label[]            @relation("LabelCreator")
+  sentMessages       TeamChatMessage[]  @relation("MessageSender")
+  receivedInvitations BoardInvitation[] @relation("InvitationRecipient")
+  sentBoardInvitations BoardInvitation[] @relation("InvitationSender")
+  receivedTeamInvitations TeamInvitation[] @relation("TeamInvitationRecipient")
+  sentTeamInvitations TeamInvitation[] @relation("TeamInvitationSender")
+
+  @@map("users")
+  @@index([name], name: "idx_users_name_search")
+  @@index([email], name: "idx_users_email_search")
+}
+
+model Session {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  expiresAt DateTime @map("expires_at") @db.Timestamptz
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId], name: "idx_sessions_user_id")
+  @@index([expiresAt], name: "idx_sessions_expires_at")
+  @@map("sessions")
+}
+
+model UserSettings {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String   @unique @map("user_id") @db.Uuid
+  theme                 String   @default("light") @db.VarChar(20)
+  language              String   @default("en") @db.VarChar(10)
+  emailNotifications    Boolean  @default(true) @map("email_notifications")
+  notificationFrequency String   @default("instant") @map("notification_frequency") @db.VarChar(20)
+  defaultBoardView      String   @default("board") @map("default_board_view") @db.VarChar(20)
+  createdAt             DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_settings")
+}
+
+model UserPreferences {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @unique @map("user_id") @db.Uuid
+  preferences Json     @default("{}") @db.JsonB
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_preferences")
+  @@index([userId], name: "user_preferences_user_id_idx")
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    String   @unique @map("user_id") @db.Uuid
+  token     String   @db.VarChar(255)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([token], name: "idx_password_reset_tokens_token")
+  @@map("password_reset_tokens")
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  token     String   @unique @db.VarChar(255)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([token], name: "idx_email_verification_tokens_token")
+  @@index([userId], name: "idx_email_verification_tokens_user_id")
+  @@map("email_verification_tokens")
+}
+
+model Workspace {
+  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String            @db.VarChar(255)
+  description String?           @db.Text
+  logo        String?           @db.VarChar(255)
+  createdBy   String            @map("created_by") @db.Uuid
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime          @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  creator     User              @relation("WorkspaceCreator", fields: [createdBy], references: [id])
+  members     WorkspaceMember[]
+  teams       Team[]
+  categories  Category[]
+  boards      Board[]
+  activities  Activity[]
+  invitations Invitation[]
+  integrations Integration[]
+  
+  @@map("workspaces")
+}
+
+model WorkspaceMember {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspaceId String    @map("workspace_id") @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  role        String    @default("MEMBER") @db.VarChar(50)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([workspaceId, userId])
+  @@index([workspaceId], name: "idx_workspace_members_workspace_id")
+  @@index([userId], name: "idx_workspace_members_user_id")
+  @@map("workspace_members")
+}
+
+model Team {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String        @db.VarChar(255)
+  description String?       @db.Text
+  workspaceId String?       @map("workspace_id") @db.Uuid
+  ownerId     String        @map("owner_id") @db.Uuid
+  createdBy   String        @map("created_by") @db.Uuid
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime      @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  creator     User          @relation("TeamCreator", fields: [createdBy], references: [id])
+  owner       User          @relation("TeamOwner", fields: [ownerId], references: [id])
+  workspace   Workspace?    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  members     TeamMember[]
+  boards      Board[]
+  activities  Activity[]
+  invitations Invitation[]
+  chatMessages TeamChatMessage[]
+  teamInvitations TeamInvitation[]
+  
+  @@index([workspaceId], name: "idx_teams_workspace_id")
+  @@map("teams")
+}
+
+model TeamMember {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  teamId    String   @map("team_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  role      String   @default("MEMBER") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([teamId, userId])
+  @@index([teamId], name: "idx_team_members_team_id")
+  @@index([userId], name: "idx_team_members_user_id")
+  @@map("team_members")
+}
+
+model Category {
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String          @db.VarChar(255)
+  title       String          @db.VarChar(255)
+  description String?         @db.Text
+  color       String          @default("#e2e8f0") @db.VarChar(50)
+  workspaceId String?         @map("workspace_id") @db.Uuid
+  createdBy   String          @map("created_by") @db.Uuid
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime        @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  creator     User            @relation("CategoryCreator", fields: [createdBy], references: [id])
+  workspace   Workspace?      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  boards      BoardCategory[]
+  members     CategoryMember[]
+  
+  @@index([workspaceId], name: "idx_categories_workspace_id")
+  @@map("categories")
+}
+
+model CategoryMember {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryId String   @map("category_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  role       String   @default("MEMBER") @db.VarChar(50)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([categoryId, userId])
+  @@index([categoryId], name: "idx_category_members_category_id")
+  @@index([userId], name: "idx_category_members_user_id")
+  @@map("category_members")
+}
+
+model Board {
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String          @db.VarChar(255)
+  title       String          @db.VarChar(255) @default("")
+  description String?         @db.Text
+  background  String          @default("#f1f5f9") @db.VarChar(255)
+  isPublic    Boolean         @default(false) @map("is_public")
+  isStarred   Boolean         @default(false) @map("is_starred")
+  teamId      String?         @map("team_id") @db.Uuid
+  workspaceId String?         @map("workspace_id") @db.Uuid
+  createdBy   String          @map("created_by") @db.Uuid
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime        @default(now()) @map("updated_at") @db.Timestamptz
+  background_color String? @map("background_color") @db.VarChar(50)
+
+  // Relations
+  creator     User            @relation("BoardCreator", fields: [createdBy], references: [id])
+  team        Team?           @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  workspace   Workspace?      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  members     BoardMember[]
+  lists       List[]
+  labels      Label[]
+  categories  BoardCategory[]
+  activities  Activity[]
+  customFields CustomField[]
+  invitations Invitation[]
+  boardInvitations BoardInvitation[]
+  
+  @@index([teamId], name: "idx_boards_team_id")
+  @@index([workspaceId], name: "idx_boards_workspace_id")
+  @@index([createdBy], name: "idx_boards_created_by")
+  @@index([isStarred], name: "idx_boards_is_starred")
+  @@map("boards")
+  @@index([name], name: "idx_boards_name_search")
+  @@index([description], name: "idx_boards_description_search")
+}
+
+model BoardCategory {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  boardId    String   @map("board_id") @db.Uuid
+  categoryId String   @map("category_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  board      Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([boardId, categoryId])
+  @@index([boardId], name: "idx_board_categories_board_id")
+  @@index([categoryId], name: "idx_board_categories_category_id")
+  @@map("board_categories")
+}
+
+model BoardMember {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  boardId   String   @map("board_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  role      String   @default("VIEWER") @db.VarChar(50)
+  isStarred Boolean  @default(false) @map("is_starred")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([boardId, userId])
+  @@index([boardId], name: "idx_board_members_board_id")
+  @@index([userId], name: "idx_board_members_user_id")
+  @@map("board_members")
+}
+
+model List {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  boardId    String   @map("board_id") @db.Uuid
+  title      String   @db.VarChar(255)
+  position   Int      @default(0)
+  isArchived Boolean  @default(false) @map("is_archived")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  board      Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  tasks      Task[]
+  
+  @@index([boardId], name: "idx_lists_board_id")
+  @@index([position], name: "idx_lists_position")
+  @@index([isArchived], name: "idx_lists_is_archived")
+  @@map("lists")
+}
+
+model Label {
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String      @db.VarChar(255)
+  color     String      @default("#e2e8f0") @db.VarChar(50)
+  boardId   String      @map("board_id") @db.Uuid
+  createdBy String?     @map("created_by") @db.Uuid
+  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  board     Board       @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  creator   User?       @relation("LabelCreator", fields: [createdBy], references: [id], onDelete: SetNull)
+  tasks     TaskLabel[]
+  
+  @@index([boardId], name: "idx_labels_board_id")
+  @@index([createdBy], name: "idx_labels_created_by")
+  @@map("labels")
+  @@index([name], name: "idx_labels_name_search")
+}
+
+model Task {
+  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String            @db.VarChar(255)
+  description String?           @db.Text
+  listId      String            @map("list_id") @db.Uuid
+  position    Int               @default(0)
+  dueDate     DateTime?         @map("due_date") @db.Timestamptz
+  startDate   DateTime?         @map("start_date") @db.Timestamptz
+  completed   Boolean           @default(false)
+  completedAt DateTime?         @map("completed_at") @db.Timestamptz
+  priority    String            @default("medium") @db.VarChar(20)
+  estimate    Float?
+  coverImage  String?           @map("cover_image") @db.VarChar(255)
+  isArchived  Boolean           @default(false) @map("is_archived")
+  createdBy   String            @map("created_by") @db.Uuid
+  assignedTo  String?           @map("assigned_to") @db.Uuid
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime          @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  creator     User              @relation("TaskCreator", fields: [createdBy], references: [id])
+  assignee    User?             @relation("TaskAssignee", fields: [assignedTo], references: [id], onDelete: SetNull)
+  list        List              @relation(fields: [listId], references: [id], onDelete: Cascade)
+  members     TaskMember[]
+  labels      TaskLabel[]
+  attachments TaskAttachment[]
+  checklists  Checklist[]
+  comments    Comment[]
+  customFieldValues CustomFieldValue[]
+  
+  @@index([listId], name: "idx_tasks_list_id")
+  @@index([position], name: "idx_tasks_position")
+  @@index([createdBy], name: "idx_tasks_created_by")
+  @@index([assignedTo], name: "idx_tasks_assigned_to")
+  @@index([dueDate], name: "idx_tasks_due_date")
+  @@index([priority], name: "idx_tasks_priority")
+  @@index([isArchived], name: "idx_tasks_is_archived")
+  @@map("tasks")
+  @@index([title], name: "idx_tasks_title_search")
+  @@index([description], name: "idx_tasks_description_search")
+}
+
+model TaskMember {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  taskId    String   @map("task_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([taskId, userId])
+  @@index([taskId], name: "idx_task_members_task_id")
+  @@index([userId], name: "idx_task_members_user_id")
+  @@map("task_members")
+}
+
+model TaskLabel {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  taskId    String   @map("task_id") @db.Uuid
+  labelId   String   @map("label_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  label     Label    @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  
+  @@unique([taskId, labelId])
+  @@index([taskId], name: "idx_task_labels_task_id")
+  @@index([labelId], name: "idx_task_labels_label_id")
+  @@map("task_labels")
+}
+
+model TaskAttachment {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  taskId     String   @map("task_id") @db.Uuid
+  name       String   @db.VarChar(255)
+  url        String   @db.VarChar(255)
+  size       Int?
+  type       String?  @db.VarChar(100)
+  createdBy  String   @map("created_by") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  creator    User     @relation("AttachmentCreator", fields: [createdBy], references: [id])
+  
+  @@index([taskId], name: "idx_task_attachments_task_id")
+  @@map("task_attachments")
+  @@index([name], name: "idx_task_attachments_name_search")
+}
+
+model Checklist {
+  id        String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String          @db.VarChar(255)
+  taskId    String          @map("task_id") @db.Uuid
+  position  Int             @default(0)
+  createdAt DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime        @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  task      Task            @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  items     ChecklistItem[]
+  
+  @@index([taskId], name: "idx_checklists_task_id")
+  @@map("checklists")
+}
+
+model ChecklistItem {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content     String    @db.Text
+  checklistId String    @map("checklist_id") @db.Uuid
+  position    Int       @default(0)
+  isCompleted Boolean   @default(false) @map("is_completed")
+  completedAt DateTime? @map("completed_at") @db.Timestamptz
+  completedBy String?   @map("completed_by") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  checklist   Checklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+  completer   User?     @relation("ItemCompleter", fields: [completedBy], references: [id])
+  
+  @@index([checklistId], name: "idx_checklist_items_checklist_id")
+  @@map("checklist_items")
+}
+
+model CustomField {
+  id        String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String            @db.VarChar(255)
+  type      String            @db.VarChar(50)
+  options   Json?
+  boardId   String            @map("board_id") @db.Uuid
+  position  Int               @default(0)
+  createdBy String            @map("created_by") @db.Uuid
+  createdAt DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime          @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  board     Board             @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  creator   User              @relation("CustomFieldCreator", fields: [createdBy], references: [id])
+  values    CustomFieldValue[]
+  
+  @@index([boardId], name: "idx_custom_fields_board_id")
+  @@map("custom_fields")
+}
+
+model CustomFieldValue {
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  taskId    String      @map("task_id") @db.Uuid
+  fieldId   String      @map("field_id") @db.Uuid
+  value     String?     @db.Text
+  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime    @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  task      Task        @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  field     CustomField @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  
+  @@unique([taskId, fieldId])
+  @@index([taskId], name: "idx_custom_field_values_task_id")
+  @@index([fieldId], name: "idx_custom_field_values_field_id")
+  @@map("custom_field_values")
+}
+
+model Comment {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content   String    @db.Text
+  taskId    String    @map("task_id") @db.Uuid
+  authorId  String    @map("author_id") @db.Uuid
+  parentId  String?   @map("parent_id") @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+ 
+  // Relations
+  task      Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author    User      @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
+ 
+  @@index([taskId], name: "idx_comments_task_id")
+  @@index([authorId], name: "idx_comments_author_id")
+  @@index([parentId], name: "idx_comments_parent_id")
+  @@map("comments")
+  @@index([content], name: "idx_comments_content_search")
+}
+
+model Notification {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  type       String   @db.VarChar(50)
+  content    String   @db.Text
+  read       Boolean  @default(false)
+  entityType String?  @map("entity_type") @db.VarChar(50)
+  entityId   String?  @map("entity_id") @db.Uuid
+  invitationId String? @map("invitation_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  isDeleted  Boolean  @default(false) @map("is_deleted")
+  emailSent  Boolean  @default(false) @map("email_sent")
+  actionTaken Boolean  @default(false) @map("action_taken")
+  
+  // Relations
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId], name: "idx_notifications_user_id")
+  @@index([read], name: "idx_notifications_read")
+  @@index([isDeleted], name: "idx_notifications_is_deleted")
+  @@map("notifications")
+}
+
+model Activity {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  action      String    @db.VarChar(50)
+  entityType  String    @map("entity_type") @db.VarChar(50)
+  entityId    String    @map("entity_id") @db.Uuid
+  boardId     String?   @map("board_id") @db.Uuid
+  teamId      String?   @map("team_id") @db.Uuid
+  workspaceId String?   @map("workspace_id") @db.Uuid
+  details     Json?
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  board       Board?    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  team        Team?     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  
+  @@index([boardId], name: "idx_activities_board_id")
+  @@index([teamId], name: "idx_activities_team_id")
+  @@index([workspaceId], name: "idx_activities_workspace_id")
+  @@index([userId], name: "idx_activities_user_id")
+  @@index([createdAt], name: "idx_activities_created_at")
+  @@map("activities")
+}
+
+model Invitation {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email       String    @db.VarChar(255)
+  token       String    @unique @db.VarChar(255)
+  role        String    @default("MEMBER") @db.VarChar(50)
+  workspaceId String?   @map("workspace_id") @db.Uuid
+  teamId      String?   @map("team_id") @db.Uuid
+  boardId     String?   @map("board_id") @db.Uuid
+  invitedBy   String    @map("invited_by") @db.Uuid
+  expiresAt   DateTime  @map("expires_at") @db.Timestamptz
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  team        Team?      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  board       Board?     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  inviter     User       @relation("InvitationCreator", fields: [invitedBy], references: [id])
+  
+  @@index([token], name: "idx_invitations_token")
+  @@index([email], name: "idx_invitations_email")
+  @@map("invitations")
+}
+
+model Integration {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String    @db.VarChar(255)
+  type        String    @db.VarChar(50)
+  config      Json
+  workspaceId String?   @map("workspace_id") @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([workspaceId], name: "idx_integrations_workspace_id")
+  @@index([userId], name: "idx_integrations_user_id")
+  @@map("integrations")
+}
+
+model AuditLog {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String?   @map("user_id") @db.Uuid
+  action     String    @db.VarChar(50)
+  entityType String    @map("entity_type") @db.VarChar(50)
+  entityId   String?   @map("entity_id") @db.Uuid
+  ipAddress  String?   @map("ip_address") @db.VarChar(50)
+  userAgent  String?   @map("user_agent") @db.Text
+  details    Json?
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  
+  // Relations
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([userId], name: "idx_audit_logs_user_id")
+  @@index([createdAt], name: "idx_audit_logs_created_at")
+  @@map("audit_logs")
+}
+
+// New models for enhanced notification system
+
+model TeamChatMessage {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  teamId    String   @map("team_id") @db.Uuid
+  senderId  String   @map("sender_id") @db.Uuid
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  
+  // Relations
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  sender    User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  
+  @@index([teamId], name: "idx_team_chat_messages_team_id")
+  @@index([senderId], name: "idx_team_chat_messages_sender_id")
+  @@index([createdAt], name: "idx_team_chat_messages_created_at")
+  @@map("team_chat_messages")
+}
+
+model BoardInvitation {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  boardId     String   @map("board_id") @db.Uuid
+  recipientId String   @map("recipient_id") @db.Uuid
+  senderId    String   @map("sender_id") @db.Uuid
+  role        String   @default("VIEWER") @db.VarChar(50)
+  status      String   @default("PENDING") @db.VarChar(20) // PENDING, ACCEPTED, DECLINED
+  message     String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  board       Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  recipient   User     @relation("InvitationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  sender      User     @relation("InvitationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  
+  @@unique([boardId, recipientId, status])
+  @@index([boardId], name: "idx_board_invitations_board_id")
+  @@index([recipientId], name: "idx_board_invitations_recipient_id")
+  @@index([status], name: "idx_board_invitations_status")
+  @@map("board_invitations")
+}
+
+model TeamInvitation {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  teamId      String   @map("team_id") @db.Uuid
+  recipientId String   @map("recipient_id") @db.Uuid
+  senderId    String   @map("sender_id") @db.Uuid
+  role        String   @default("MEMBER") @db.VarChar(50)
+  status      String   @default("PENDING") @db.VarChar(20) // PENDING, ACCEPTED, DECLINED
+  message     String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamptz
+  
+  // Relations
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  recipient   User     @relation("TeamInvitationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  sender      User     @relation("TeamInvitationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  
+  @@unique([teamId, recipientId, status])
+  @@index([teamId], name: "idx_team_invitations_team_id")
+  @@index([recipientId], name: "idx_team_invitations_recipient_id")
+  @@index([status], name: "idx_team_invitations_status")
+  @@map("team_invitations")
+}
