@@ -37,11 +37,6 @@ POSTGRES_HOST=your_db_host
 POSTGRES_PASSWORD=your_db_password
 POSTGRES_DATABASE=your_db_name
 
-# Redis Cache
-REDIS_URL=your_redis_url
-UPSTASH_REDIS_REST_URL=your_upstash_rest_url
-UPSTASH_REDIS_REST_TOKEN=your_upstash_rest_token
-
 # SMTP Email Configuration
 SMTP_HOST=your_smtp_host
 SMTP_PORT=587
