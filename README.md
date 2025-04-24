@@ -1,5 +1,62 @@
 # TaskTogether
 
+## Backend Stack
+
+- **Main language**: TypeScript/JavaScript
+- **Framework**: Next.js (App Router)
+- **API**: Next.js API Routes
+- **Authentication**: Custom JWT (jose library)
+- **DBMS**: PostgreSQL (Neon)
+
+
+## Frontend Stack
+
+- **Main language**: TypeScript
+- **Framework**: React with Next.js
+- **Build Tool**: Next.js build system
+
+
+## Frontend Libraries
+
+- **Routing**: Next.js App Router
+- **UI Component Library**: shadcn/ui
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Form Handling**: React Hook Form (implied from shadcn/ui usage)
+
+
+## Database
+
+- **Type**: PostgreSQL
+- **Hosting**: Local machine (with Neon compatibility)
+- **ORM/Query**: Raw SQL with pg Pool and neon
+- **Connection**: @neondatabase/serverless
+
+
+## Authentication & Security
+
+- **Auth Method**: JWT (jose library)
+- **Password Hashing**: bcryptjs
+- **Session Management**: Custom cookie-based sessions
+
+
+## Other Tools & Libraries
+
+- **HTTP Client**: Native fetch API
+- **Date Handling**: Native JavaScript Date
+- **File Upload**: Custom implementation
+- **Email**: Nodemailer (implied from types)
+- **Websockets**: ws (for development with Neon)
+
+
+## Development Tools
+
+- **Package Manager**: npm
+- **Linting**: ESLint
+- **Type Checking**: TypeScript
+- **Version Control**: Git
+
+
 A collaborative task management application built with Next.js.
 
 ## Getting Started
