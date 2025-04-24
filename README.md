@@ -6,7 +6,7 @@
 - **Framework**: Next.js (App Router)
 - **API**: Next.js API Routes
 - **Authentication**: Custom JWT (jose library)
-- **DBMS**: PostgreSQL (Neon)
+- **DBMS**: PostgreSQL
 
 
 ## Frontend Stack
@@ -28,9 +28,9 @@
 ## Database
 
 - **Type**: PostgreSQL
-- **Hosting**: Local machine (with Neon compatibility)
-- **ORM/Query**: Raw SQL with pg Pool and neon
-- **Connection**: @neondatabase/serverless
+- **Hosting**: Local machine
+- **ORM/Query**: Raw SQL with pg Pool 
+- **Connection**: Local machine
 
 
 ## Authentication & Security
@@ -46,7 +46,7 @@
 - **Date Handling**: Native JavaScript Date
 - **File Upload**: Custom implementation
 - **Email**: Nodemailer (implied from types)
-- **Websockets**: ws (for development with Neon)
+
 
 
 ## Development Tools
