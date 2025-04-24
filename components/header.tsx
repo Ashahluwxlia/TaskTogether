@@ -8,7 +8,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Plus, Mail, CalendarIcon, Trash, X } from "lucide-react"
+import { Search, Plus, CalendarIcon, Trash, X } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -113,10 +113,7 @@ export function Header({ initialUser }: HeaderProps) {
   const [user] = useState<User | undefined>(initialUser)
   const [searchQuery, setSearchQuery] = useState("")
   const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false)
-  const [isMailDialogOpen, setIsMailDialogOpen] = useState(false)
-  const [mailSubject, setMailSubject] = useState("")
-  const [mailMessage, setMailMessage] = useState("")
-  const [mailTo, setMailTo] = useState("")
+
 
   // Task creation state
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -348,29 +345,7 @@ export function Header({ initialUser }: HeaderProps) {
     }
   }
 
-  const handleSendMail = (e: React.FormEvent) => {
-    e.preventDefault()
 
-    if (!mailTo.trim() || !mailSubject.trim()) {
-      toast({
-        title: "Error",
-        description: "Email recipient and subject are required",
-        variant: "destructive",
-      })
-      return
-    }
-
-    // This is a mock function since we don't have actual email functionality
-    toast({
-      title: "Email Sent",
-      description: `Your message has been sent to ${mailTo}`,
-    })
-
-    setIsMailDialogOpen(false)
-    setMailTo("")
-    setMailSubject("")
-    setMailMessage("")
-  }
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" })
@@ -834,61 +809,7 @@ export function Header({ initialUser }: HeaderProps) {
 
           <ThemeToggle />
 
-          <Dialog open={isMailDialogOpen} onOpenChange={setIsMailDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-foreground">
-                <Mail className="h-5 w-5" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Send Message</DialogTitle>
-                <DialogDescription>Send a message to team members</DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleSendMail}>
-                <div className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="to">To</Label>
-                    <Input
-                      id="to"
-                      placeholder="recipient@example.com"
-                      value={mailTo}
-                      onChange={(e) => setMailTo(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="subject">Subject</Label>
-                    <Input
-                      id="subject"
-                      placeholder="Message subject"
-                      value={mailSubject}
-                      onChange={(e) => setMailSubject(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
-                    <Textarea
-                      id="message"
-                      placeholder="Type your message here"
-                      value={mailMessage}
-                      onChange={(e) => setMailMessage(e.target.value)}
-                      rows={5}
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button type="button" variant="outline" onClick={() => setIsMailDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit" className="bg-yellow-400 hover:bg-yellow-500 text-black">
-                    Send Message
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          
 
           <NotificationsButton />
 
