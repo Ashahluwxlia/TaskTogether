@@ -1,0 +1,67 @@
+2025-04-21 03:31:39.005 NZST [97580] LOG:  starting PostgreSQL 14.17 (Homebrew) on aarch64-apple-darwin24.2.0, compiled by Apple clang version 16.0.0 (clang-1600.0.26.6), 64-bit
+2025-04-21 03:31:39.006 NZST [97580] LOG:  could not bind IPv6 address "::1": Address already in use
+2025-04-21 03:31:39.006 NZST [97580] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-04-21 03:31:39.007 NZST [97580] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2025-04-21 03:31:39.007 NZST [97580] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-04-21 03:31:39.007 NZST [97580] WARNING:  could not create listen socket for "localhost"
+2025-04-21 03:31:39.007 NZST [97580] FATAL:  could not create any TCP/IP sockets
+2025-04-21 03:31:39.007 NZST [97580] LOG:  database system is shut down
+2025-04-21 03:36:10.652 NZST [99128] LOG:  starting PostgreSQL 14.17 (Homebrew) on aarch64-apple-darwin24.2.0, compiled by Apple clang version 16.0.0 (clang-1600.0.26.6), 64-bit
+2025-04-21 03:36:10.652 NZST [99128] LOG:  could not bind IPv6 address "::1": Address already in use
+2025-04-21 03:36:10.652 NZST [99128] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-04-21 03:36:10.652 NZST [99128] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2025-04-21 03:36:10.652 NZST [99128] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-04-21 03:36:10.652 NZST [99128] WARNING:  could not create listen socket for "localhost"
+2025-04-21 03:36:10.652 NZST [99128] FATAL:  could not create any TCP/IP sockets
+2025-04-21 03:36:10.652 NZST [99128] LOG:  database system is shut down
+2025-04-21 03:36:56.525 NZST [99398] LOG:  starting PostgreSQL 14.17 (Homebrew) on aarch64-apple-darwin24.2.0, compiled by Apple clang version 16.0.0 (clang-1600.0.26.6), 64-bit
+2025-04-21 03:36:56.526 NZST [99398] LOG:  could not bind IPv6 address "::1": Address already in use
+2025-04-21 03:36:56.526 NZST [99398] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-04-21 03:36:56.526 NZST [99398] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2025-04-21 03:36:56.526 NZST [99398] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-04-21 03:36:56.526 NZST [99398] WARNING:  could not create listen socket for "localhost"
+2025-04-21 03:36:56.526 NZST [99398] FATAL:  could not create any TCP/IP sockets
+2025-04-21 03:36:56.526 NZST [99398] LOG:  database system is shut down
+2025-04-21 03:38:13.988 NZST [99813] LOG:  starting PostgreSQL 14.17 (Homebrew) on aarch64-apple-darwin24.2.0, compiled by Apple clang version 16.0.0 (clang-1600.0.26.6), 64-bit
+2025-04-21 03:38:13.989 NZST [99813] LOG:  could not bind IPv6 address "::1": Address already in use
+2025-04-21 03:38:13.989 NZST [99813] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-04-21 03:38:13.989 NZST [99813] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2025-04-21 03:38:13.989 NZST [99813] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-04-21 03:38:13.989 NZST [99813] WARNING:  could not create listen socket for "localhost"
+2025-04-21 03:38:13.989 NZST [99813] FATAL:  could not create any TCP/IP sockets
+2025-04-21 03:38:13.989 NZST [99813] LOG:  database system is shut down
+2025-04-21 03:39:52.387 NZST [472] LOG:  starting PostgreSQL 14.17 (Homebrew) on aarch64-apple-darwin24.2.0, compiled by Apple clang version 16.0.0 (clang-1600.0.26.6), 64-bit
+2025-04-21 03:39:52.387 NZST [472] LOG:  listening on IPv6 address "::1", port 5433
+2025-04-21 03:39:52.387 NZST [472] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2025-04-21 03:39:52.388 NZST [472] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2025-04-21 03:39:52.389 NZST [473] LOG:  database system was shut down at 2025-04-21 03:31:23 NZST
+2025-04-21 03:39:52.390 NZST [472] LOG:  database system is ready to accept connections
+2025-04-21 03:42:12.646 NZST [1513] LOG:  could not receive data from client: Connection reset by peer
+2025-04-21 03:42:21.051 NZST [1612] ERROR:  table "_prisma_migrations" does not exist
+2025-04-21 03:42:21.051 NZST [1612] STATEMENT:  DROP TABLE _prisma_migrations
+2025-04-21 03:43:47.223 NZST [2652] ERROR:  relation "team_boards" does not exist at character 295
+2025-04-21 03:43:47.223 NZST [2652] STATEMENT:  SELECT t.*, l.title as list_title, b.name as board_title, u.name as assignee_name, u.image as assignee_image
+	     FROM tasks t
+	     JOIN lists l ON t.list_id = l.id
+	     JOIN boards b ON l.board_id = b.id
+	     LEFT JOIN board_members bm ON b.id = bm.board_id AND bm.user_id = $1
+	     LEFT JOIN team_boards tb ON b.id = tb.board_id
+	     LEFT JOIN team_members tm ON tb.team_id = tm.team_id AND tm.user_id = $1
+	     LEFT JOIN users u ON t.assigned_to = u.id
+	     WHERE (bm.user_id = $1 OR tm.user_id = $1) AND (t.completed = false OR t.completed IS NULL)
+	     ORDER BY t.due_date ASC NULLS LAST
+2025-04-21 03:43:47.281 NZST [2651] ERROR:  relation "team_boards" does not exist at character 295
+2025-04-21 03:43:47.281 NZST [2651] STATEMENT:  SELECT t.*, l.title as list_title, b.name as board_title, u.name as assignee_name, u.image as assignee_image
+	     FROM tasks t
+	     JOIN lists l ON t.list_id = l.id
+	     JOIN boards b ON l.board_id = b.id
+	     LEFT JOIN board_members bm ON b.id = bm.board_id AND bm.user_id = $1
+	     LEFT JOIN team_boards tb ON b.id = tb.board_id
+	     LEFT JOIN team_members tm ON tb.team_id = tm.team_id AND tm.user_id = $1
+	     LEFT JOIN users u ON t.assigned_to = u.id
+	     WHERE (bm.user_id = $1 OR tm.user_id = $1) AND (t.completed = false OR t.completed IS NULL)
+	     ORDER BY t.due_date ASC NULLS LAST
+2025-04-21 03:44:50.319 NZST [3181] LOG:  could not receive data from client: Connection reset by peer
+2025-04-21 03:44:50.737 NZST [3203] FATAL:  terminating connection due to administrator command
+2025-04-21 03:44:51.035 NZST [3211] FATAL:  terminating connection due to administrator command
+2025-04-21 03:44:51.313 NZST [3215] FATAL:  terminating connection due to administrator command

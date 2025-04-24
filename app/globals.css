@@ -1,0 +1,780 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+
+    --radius: 0.5rem;
+
+    --sidebar-bg: 0 0% 100%;
+    --sidebar-fg: 222.2 84% 4.9%;
+    --sidebar-hover: 210 40% 94%;
+    --sidebar-active: 221.2 83.2% 53.3%;
+    --sidebar-active-fg: 210 40% 98%;
+
+    --header-bg: 0 0% 100%;
+    --header-fg: 222.2 84% 4.9%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%; /* Dark grey */
+    --foreground: 210 40% 98%; /* White */
+
+    --card: 222.2 84% 4.9%; /* Dark grey */
+    --card-foreground: 210 40% 98%; /* White */
+
+    --popover: 222.2 84% 4.9%; /* Dark grey */
+    --popover-foreground: 210 40% 98%; /* White */
+
+    --primary: 217.2 91.2% 59.8%; /* Light grey */
+    --primary-foreground: 222.2 47.4% 11.2%; /* Black */
+
+    --secondary: 217.2 32.6% 17.5%; /* Darker grey */
+    --secondary-foreground: 210 40% 98%; /* White */
+
+    --muted: 217.2 32.6% 17.5%; /* Darker grey */
+    --muted-foreground: 215 20.2% 65.1%; /* Light grey */
+
+    --accent: 217.2 32.6% 17.5%; /* Darker grey */
+    --accent-foreground: 210 40% 98%; /* White */
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%; /* Darker grey */
+    --input: 217.2 32.6% 17.5%; /* Darker grey */
+    --ring: 224.3 76.3% 48%;
+
+    --sidebar-bg: 222.2 84% 4.9%;
+    --sidebar-fg: 210 40% 98%;
+    --sidebar-hover: 217.2 32.6% 20%;
+    --sidebar-active: 221.2 83.2% 53.3%;
+    --sidebar-active-fg: 210 40% 98%;
+
+    --header-bg: 222.2 84% 4.9%; /* Dark grey */
+    --header-fg: 210 40% 98%; /* White */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.875rem;
+  margin-bottom: 0.875rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.625rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Form elements */
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  font-size: 100%;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Utility classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Dark mode transitions */
+html.dark body,
+html.dark * {
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Ensure yellow buttons have proper contrast in both modes */
+.bg-yellow-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
+}
+
+.dark .bg-yellow-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
+}
+
+.dark .hover\:bg-yellow-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(234 179 8 / var(--tw-bg-opacity));
+}
+
+/* Ensure text on yellow buttons is always black for readability */
+.bg-yellow-400,
+.hover\:bg-yellow-500:hover,
+.dark .bg-yellow-400,
+.dark .hover\:bg-yellow-500:hover {
+  color: #000 !important;
+}
+
+/* Sidebar styling */
+.sidebar {
+  background-color: hsl(var(--sidebar-bg));
+  color: hsl(var(--sidebar-fg));
+  border-right: 1px solid hsl(var(--border));
+}
+
+.dark .sidebar {
+  background-color: hsl(var(--sidebar-bg));
+  color: hsl(var(--sidebar-fg));
+  border-right: 1px solid hsl(var(--border));
+}
+
+/* Sidebar item styling */
+.sidebar-item {
+  color: hsl(var(--sidebar-fg));
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark .sidebar-item {
+  color: hsl(var(--sidebar-fg));
+}
+
+.sidebar-item:hover {
+  background-color: hsl(var(--sidebar-hover));
+}
+
+.dark .sidebar-item:hover {
+  background-color: hsl(var(--sidebar-hover));
+}
+
+.sidebar-item.active {
+  background-color: hsl(var(--sidebar-active));
+  color: hsl(var(--sidebar-active-fg));
+  font-weight: 500;
+}
+
+.dark .sidebar-item.active {
+  background-color: hsl(var(--sidebar-active));
+  color: hsl(var(--sidebar-active-fg));
+  font-weight: 500;
+}
+
+/* App name in sidebar */
+.sidebar .app-name {
+  color: hsl(var(--foreground));
+}
+
+.dark .sidebar .app-name {
+  color: hsl(var(--foreground));
+}
+
+/* Header styling */
+.header {
+  background-color: hsl(var(--header-bg));
+  color: hsl(var(--header-fg));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.dark .header {
+  background-color: hsl(var(--header-bg));
+  color: hsl(var(--header-fg));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+/* Task card styling */
+.task-card {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border: 1px solid hsl(var(--border));
+}
+
+.dark .task-card {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border: 1px solid hsl(var(--border));
+}
+
+/* Page headings */
+.page-heading {
+  color: hsl(var(--foreground));
+}
+
+.dark .page-heading {
+  color: hsl(var(--foreground));
+}
+
+/* Task titles in dark mode */
+.dark .task-title {
+  color: hsl(var(--foreground));
+}
+
+/* Ensure proper contrast for links in dark mode */
+.dark a {
+  color: hsl(var(--primary));
+}
+
+/* Ensure proper contrast for task cards in dark mode */
+.dark .border {
+  border-color: hsl(var(--border));
+}
+
+/* Ensure proper contrast for progress bars in dark mode */
+.dark progress {
+  background-color: hsl(var(--muted));
+}
+
+.dark progress::-webkit-progress-bar {
+  background-color: hsl(var(--muted));
+}
+
+.dark progress::-webkit-progress-value {
+  background-color: hsl(var(--primary));
+}
+
+.dark progress::-moz-progress-bar {
+  background-color: hsl(var(--primary));
+}
+
+/* Preserve board background colors regardless of theme */
+[data-board-background] {
+  background-color: var(--board-background-color) !important;
+}
+
+/* Ensure dialog content is properly themed */
+.dark .bg-background {
+  background-color: hsl(var(--background));
+}
+
+.dark .text-foreground {
+  color: hsl(var(--foreground));
+}
+
+/* Ensure text is properly themed */
+.text-foreground {
+  color: hsl(var(--foreground)) !important; /* Black */
+}
+
+.dark .text-foreground {
+  color: hsl(var(--foreground)) !important; /* White */
+}
+
+/* Ensure dropdown menus are properly themed */
+.dark .bg-popover {
+  background-color: hsl(var(--popover));
+}
+
+.dark .text-popover-foreground {
+  color: hsl(var(--popover-foreground));
+}
+
+/* Ensure inputs are properly themed */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: hsl(var(--input));
+  color: hsl(var(--foreground));
+}
+
+/* Ensure buttons are properly themed */
+.dark button:not(.bg-yellow-400):not(.hover\:bg-yellow-500) {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+/* Ensure cards are properly themed */
+.dark .bg-card {
+  background-color: hsl(var(--card));
+}
+
+.dark .text-card-foreground {
+  color: hsl(var(--card-foreground));
+}
+
+/* Ensure list columns are properly themed */
+.dark .list-column {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-color: hsl(var(--border));
+}
+
+/* Ensure icons are properly themed */
+.dark svg:not(.text-yellow-400):not(.text-yellow-500) {
+  color: hsl(var(--foreground)) !important; /* White */
+}
+
+/* Ensure icons are properly themed */
+svg:not(.text-yellow-400):not(.text-yellow-500) {
+  color: hsl(var(--foreground)) !important; /* Black */
+}
+
+/* Fix for light blue sidebar in dark mode */
+.dark .bg-slate-50 {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Fix for light blue active items in dark mode */
+.dark .bg-sky-500\/10 {
+  background-color: hsl(var(--accent)) !important;
+}
+
+.dark .text-sky-700 {
+  color: hsl(var(--accent-foreground)) !important;
+}
+
+/* Fix for light text in dark mode */
+.dark .text-gray-500 {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Ensure muted text is properly themed */
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground)) !important; /* Light grey */
+}
+
+.dark .text-muted-foreground {
+  color: hsl(var(--muted-foreground)) !important; /* Light grey */
+}
+
+/* Fix for hover states in dark mode */
+.dark .hover\:bg-gray-100:hover {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light blue backgrounds in dark mode */
+.dark .bg-blue-500 {
+  background-color: hsl(var(--primary)) !important;
+}
+
+/* Fix for task titles in dark mode */
+.dark .task-title,
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Fix for light blue text in dark mode */
+.dark .text-blue-500 {
+  color: hsl(var(--primary)) !important;
+}
+
+/* Ensure primary text is properly themed */
+.text-primary-foreground {
+  color: hsl(var(--primary-foreground)) !important; /* Black */
+}
+
+.dark .text-primary-foreground {
+  color: hsl(var(--primary-foreground)) !important; /* White */
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-white,
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .bg-gray-200 {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Fix for tab backgrounds in dark mode */
+.dark .bg-blue-100 {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light borders in dark mode */
+.dark .border-gray-200,
+.dark .border-gray-300 {
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Fix for light shadows in dark mode */
+.dark .shadow-sm,
+.dark .shadow,
+.dark .shadow-md,
+.dark .shadow-lg {
+  --tw-shadow-color: rgba(0, 0, 0, 0.3);
+  --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+/* Fix for light blue active items in dark mode */
+.dark .active\:bg-blue-100:active {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light blue focus rings in dark mode */
+.dark .focus\:ring-blue-500:focus {
+  --tw-ring-color: hsl(var(--ring)) !important;
+}
+
+/* Fix for light blue hover states in dark mode */
+.dark .hover\:bg-blue-100:hover {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light blue text in dark mode */
+.dark .text-blue-600 {
+  color: hsl(var(--primary)) !important;
+}
+
+/* Fix for light blue hover text in dark mode */
+.dark .hover\:text-blue-700:hover {
+  color: hsl(var(--primary)) !important;
+}
+
+/* Fix for light backgrounds in inputs in dark mode */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: hsl(var(--input));
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+}
+
+/* Fix for light backgrounds in buttons in dark mode */
+.dark .bg-gray-100,
+.dark .bg-gray-200,
+.dark .bg-gray-300 {
+  background-color: hsl(var(--muted)) !important;
+}
+
+/* Fix for light text in dark mode */
+.dark .text-gray-600,
+.dark .text-gray-700,
+.dark .text-gray-800,
+.dark .text-gray-900 {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Fix for light muted text in dark mode */
+.dark .text-gray-400,
+.dark .text-gray-500 {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-gray-50 {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Fix for light blue backgrounds in dark mode */
+.dark .bg-blue-50 {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light green backgrounds in dark mode */
+.dark .bg-green-50 {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light red backgrounds in dark mode */
+.dark .bg-red-50 {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light yellow backgrounds in dark mode */
+.dark .bg-yellow-50 {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light purple backgrounds in dark mode */
+.dark .bg-purple-50 {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light indigo backgrounds in dark mode */
+.dark .bg-indigo-50 {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light pink backgrounds in dark mode */
+.dark .bg-pink-50 {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-white\/50 {
+  background-color: hsla(var(--background), 0.5) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-white\/30 {
+  background-color: hsla(var(--background), 0.3) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-white\/20 {
+  background-color: hsla(var(--background), 0.2) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-white\/10 {
+  background-color: hsla(var(--background), 0.1) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-black\/50 {
+  background-color: hsla(0, 0%, 0%, 0.5) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-black\/30 {
+  background-color: hsla(0, 0%, 0%, 0.3) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-black\/20 {
+  background-color: hsla(0, 0%, 0%, 0.2) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-black\/10 {
+  background-color: hsla(0, 0%, 0%, 0.1) !important;
+}
+
+/* Fix for light blue text in dark mode */
+.dark .text-blue-400,
+.dark .text-blue-500,
+.dark .text-blue-600,
+.dark .text-blue-700,
+.dark .text-blue-800,
+.dark .text-blue-900 {
+  color: hsl(var(--primary)) !important;
+}
+
+/* Fix for light green text in dark mode */
+.dark .text-green-400,
+.dark .text-green-500,
+.dark .text-green-600,
+.dark .text-green-700,
+.dark .text-green-800,
+.dark .text-green-900 {
+  color: hsl(142.1 76.2% 36.3%) !important;
+}
+
+/* Fix for light red text in dark mode */
+.dark .text-red-400,
+.dark .text-red-500,
+.dark .text-red-600,
+.dark .text-red-700,
+.dark .text-red-800,
+.dark .text-red-900 {
+  color: hsl(0 72.2% 50.6%) !important;
+}
+
+/* Fix for light yellow text in dark mode */
+.dark .text-yellow-400,
+.dark .text-yellow-500,
+.dark .text-yellow-600,
+.dark .text-yellow-700,
+.dark .text-yellow-800,
+.dark .text-yellow-900 {
+  color: hsl(48 96.5% 53.1%) !important;
+}
+
+/* Fix for light purple text in dark mode */
+.dark .text-purple-400,
+.dark .text-purple-500,
+.dark .text-purple-600,
+.dark .text-purple-700,
+.dark .text-purple-800,
+.dark .text-purple-900 {
+  color: hsl(280 100% 70%) !important;
+}
+
+/* Fix for light indigo text in dark mode */
+.dark .text-indigo-400,
+.dark .text-indigo-500,
+.dark .text-indigo-600,
+.dark .text-indigo-700,
+.dark .text-indigo-800,
+.dark .text-indigo-900 {
+  color: hsl(226 100% 70%) !important;
+}
+
+/* Fix for light pink text in dark mode */
+.dark .text-pink-400,
+.dark .text-pink-500,
+.dark .text-pink-600,
+.dark .text-pink-700,
+.dark .text-pink-800,
+.dark .text-pink-900 {
+  color: hsl(330 100% 70%) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-muted\/40 {
+  background-color: hsla(var(--muted), 0.4) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-muted\/30 {
+  background-color: hsla(var(--muted), 0.3) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-muted\/20 {
+  background-color: hsla(var(--muted), 0.2) !important;
+}
+
+/* Fix for light backgrounds in dark mode */
+.dark .bg-muted\/10 {
+  background-color: hsla(var(--muted), 0.1) !important;
+}
+
+/* Fix for page headings in dark mode */
+.dark [class*="My Tasks"],
+.dark [class*="Dashboard"],
+.dark [class*="Boards"],
+.dark [class*="Teams"],
+.dark [class*="Profile"],
+.dark [class*="Settings"] {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Fix for task titles in dark mode */
+.dark [class*="Testing"],
+.dark [class*="Take_"],
+.dark [class*="Test_"] {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Dashboard card hover effects */
+.dashboard-card-hover:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.dark .dashboard-card-hover:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
