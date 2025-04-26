@@ -6,7 +6,6 @@ import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Progress } from "@/components/ui/progress"
 import {
   ArrowLeft,
   CheckSquare,
@@ -214,10 +213,6 @@ export function TeamDetailContent({ teamId }: TeamDetailContentProps) {
               <CardContent>
                 <div className="text-2xl font-bold">Active</div>
                 <p className="text-xs text-muted-foreground">Last updated recently</p>
-                <div className="mt-2">
-                  <Progress value={75} className="h-2" />
-                  <p className="text-xs text-muted-foreground mt-1">75% activity level</p>
-                </div>
               </CardContent>
             </Card>
 
