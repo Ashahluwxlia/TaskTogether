@@ -1070,6 +1070,7 @@ export function BoardView({ user: userProp, board }: BoardViewProps) {
               isStarred: board.is_starred,
               backgroundColor: backgroundColor,
             }}
+            currentUserId={userProp.id}
             onUpdateBoard={async (data) => {
               try {
                 // Apply background color immediately before API call
