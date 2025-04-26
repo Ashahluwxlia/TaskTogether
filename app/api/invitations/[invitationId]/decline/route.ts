@@ -54,12 +54,15 @@ export async function POST(req: NextRequest, { params }: { params: { invitationI
       await createNotification({
         userId: invitation.senderId,
         type: "INVITATION_DECLINED",
-        content: `${user.name} declined your invitation to join the board "${invitation.board.title}"`,
+        content: `${user.name} declined your invitation to join the board "${invitation.board.name || invitation.board.title || "Untitled Board"}"`,
         entityType: "BOARD",
         entityId: invitation.boardId,
       })
 
-      return NextResponse.json({ message: "Invitation declined successfully" })
+      return NextResponse.json({
+        message: "Invitation declined successfully",
+        boardName: invitation.board.name || invitation.board.title || "Untitled Board",
+      })
     } else {
       // Handle team invitation
       const invitation = await prisma.teamInvitation.findUnique({

@@ -287,14 +287,14 @@ export async function sendBoardInvitationEmail(invitationId: string) {
     const html = createBoardInvitationEmail(
       invitation.recipient.name || "there",
       invitation.sender?.name || "Someone",
-      invitation.board?.title || "a board",
+      invitation.board?.name || invitation.board?.title || "Untitled Board",
       inviteUrl,
       invitation.message || undefined,
     )
 
     return await sendEmail({
       to: invitation.recipient.email,
-      subject: `Invitation to join ${invitation.board?.title || "a board"} on TaskTogether`,
+      subject: `Invitation to join ${invitation.board?.name || invitation.board?.title || "Untitled Board"} on TaskTogether`,
       html,
     })
   } catch (error) {

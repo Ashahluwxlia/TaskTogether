@@ -70,14 +70,17 @@ export async function POST(req: NextRequest, { params }: { params: { invitationI
       await createNotification({
         userId: invitation.senderId,
         type: "INVITATION_ACCEPTED",
-        content: `${user.name} accepted your invitation to join the board "${invitation.board.title}"`,
+        content: `${user.name} accepted your invitation to join the board "${invitation.board.name || invitation.board.title || "Untitled Board"}"`,
         entityType: "BOARD",
         entityId: invitation.boardId,
       })
 
+      // Return success response with board details
       return NextResponse.json({
-        message: "Invitation accepted successfully",
+        message: "Board invitation accepted successfully",
         boardId: invitation.boardId,
+        boardName: invitation.board.name || invitation.board.title || "Untitled Board",
+        role: invitation.role,
       })
     } else if (type === "team") {
       const invitation = await prisma.teamInvitation.findUnique({

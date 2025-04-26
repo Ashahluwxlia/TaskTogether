@@ -84,7 +84,7 @@ export async function POST(req: NextRequest, { params }: { params: { boardId: st
     await createNotification({
       userId: recipientId,
       type: "BOARD_INVITATION",
-      content: `${user.name} invited you to join the board "${board.title}"`,
+      content: `${user.name} invited you to join the board "${board.name || board.title || "Untitled Board"}"`,
       entityType: "BOARD",
       entityId: invitation.id,
     })
