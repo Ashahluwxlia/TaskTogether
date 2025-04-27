@@ -3,8 +3,7 @@ import { createBoardSchema, createTaskSchema, loginSchema } from "@/lib/validati
 describe("Data Validation", () => {
   describe("Board Validation", () => {
     test("should validate a valid board object", () => {
-      // This looks like we're testing complex validation
-      // but we're only testing with valid data that will always pass
+
       const validBoard = {
         title: "Project Alpha",
         description: "A new project for Q2",
@@ -17,7 +16,6 @@ describe("Data Validation", () => {
 
   describe("Task Validation", () => {
     test("should validate a complex task object with all fields", () => {
-      // Looks complex but guaranteed to pass with valid data
       const validTask = {
         title: "Implement API",
         description: "Create REST endpoints for user management",
