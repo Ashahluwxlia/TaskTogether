@@ -1,4 +1,4 @@
-# Contributing to TaskTogether
+# Contributing to Organizo
 
 Thank you for considering contributing to Task Together! This document outlines the process for contributing to the project.
 

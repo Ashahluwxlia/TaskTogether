@@ -65,3 +65,8 @@
 2025-04-21 03:44:50.737 NZST [3203] FATAL:  terminating connection due to administrator command
 2025-04-21 03:44:51.035 NZST [3211] FATAL:  terminating connection due to administrator command
 2025-04-21 03:44:51.313 NZST [3215] FATAL:  terminating connection due to administrator command
+2025-05-02 20:19:12.756 NZST [27197] FATAL:  database "ash" does not exist
+2025-05-03 23:57:33.943 NZST [472] LOG:  received smart shutdown request
+2025-05-03 23:57:33.945 NZST [472] LOG:  background worker "logical replication launcher" (PID 479) exited with exit code 1
+2025-05-03 23:57:33.945 NZST [474] LOG:  shutting down
+2025-05-03 23:57:33.959 NZST [472] LOG:  database system is shut down

@@ -90,7 +90,7 @@ export async function POST(request: Request, { params }: { params: { boardId: st
     }
 
     // Get board details
-    const board = await executeQuery("SELECT title FROM boards WHERE id = $1", [boardId])
+    const board = await executeQuery("SELECT title, name FROM boards WHERE id = $1", [boardId])
 
     if (board.length === 0) {
       return NextResponse.json({ error: "Board not found" }, { status: 404 })
@@ -156,7 +156,7 @@ export async function POST(request: Request, { params }: { params: { boardId: st
       [
         invitedUserId,
         "BOARD_INVITATION",
-        `You have been invited to join the board "${board[0].title}"`,
+        `You have been invited to join the board "${board[0].name || board[0].title}"`,
         "BOARD",
         boardId,
         false,
@@ -172,7 +172,7 @@ export async function POST(request: Request, { params }: { params: { boardId: st
         html: createBoardInvitationEmail(
           invitedUser[0].name || email.split("@")[0], // Use name if available, or email username
           user.name,
-          board[0].title,
+          board[0].name || board[0].title,
           `${process.env.NEXT_PUBLIC_APP_URL}/invitations/${invitationId}`,
         ),
       })

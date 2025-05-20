@@ -379,3 +379,16 @@ Built using:
 6. Permission errors show appropriate messaging
 7. Database errors are logged and sanitized before client response
 
+5. Development Approach
+
+5.1 AI-Assisted Development
+
+As the sole developer, I used AI tools like ChatGPT, GitHub Copilot, and v0 to support:
+	•	Fast boilerplate generation
+	•	UI layout and logic suggestions
+	•	Debugging and architectural advice
+
+5.2 Process
+	•	Iterative feature rollout
+	•	Reusable component architecture
+	•	Regular refactoring and testing
